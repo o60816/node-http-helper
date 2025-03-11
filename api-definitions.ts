@@ -37,15 +37,15 @@ class CreateUserResponseDto {
 
 export const API_DEFINITIONS = {
   getUserDetails: {
-    method: 'get' as const,
-    url: `https://jsonplaceholder.typicode.com/users/{userId}` as const,
+    method: 'get',
+    url: `https://jsonplaceholder.typicode.com/users/{userId}`,
     request: undefined,
     response: new GetUserResponseDto(),
   },
   createUser: {
-    method: 'post' as const,
-    url: `https://jsonplaceholder.typicode.com/users` as const,
+    method: 'post',
+    url: `https://jsonplaceholder.typicode.com/users`,
     request: new CreateUserReqDto(),
     response: new CreateUserResponseDto(),
   }
-};
+} as const;
