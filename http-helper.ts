@@ -22,18 +22,18 @@ class BaseHttpHelper {
     }
   }
 
-  private handleRouteParams(url: string, pathParams: Record<string, any>) {
+  private handlePathParams(url: string, pathParams: Record<string, any>) {
     return url.replace(/{(\w+)}/g, (_, key) => {
       const value = pathParams[key];
       if (!value) {
-        throw new Error(`Route param ${key} not found in payload`);
+        throw new Error(`Path param ${key} not found in payload`);
       }
       return value;
     });
   }
 
   private formatUrl(url: string, pathParams: Record<string, any>) {
-    return this.handleRouteParams(url, pathParams);
+    return this.handlePathParams(url, pathParams);
   }
 
   private formatPayload(
@@ -77,7 +77,7 @@ class BaseHttpHelper {
 
     try {
       const response: AxiosResponse = await this.http[method](formattedUrl, formattedPayload, { headers });
-      this.logger.info({ url: formattedUrl, payload: formattedPayload, response: response.data, tags } );
+      this.logger.info({ url: formattedUrl, payload: formattedPayload, response: response.data, tags });
       return response.data;
     } catch (error) {
       this.handleHttpError(error, formattedUrl, formattedPayload, tags);
@@ -93,7 +93,7 @@ class BaseHttpHelper {
     const { message, response = { status: 400, data: {} } } = error;
     const { data, status } = response;
     const errMsg = `${message}, ${JSON.stringify(data)}`;
-    this.logger.error({url, payload, errMsg, tags});
+    this.logger.error({ url, payload, errMsg, tags });
 
     throw new Error(`[${tags.join(', ')}] unhandled error: ${errMsg}`);
   }
@@ -116,19 +116,19 @@ type Api = {
   [ApiName in ApiNames]: (
     reqDetails: NonUndefined<{
       [K in keyof ReqDetails]: K extends 'payload'
-        ? ApiDefinitions[ApiName]['request']
-        : K extends 'pathParams'
-          ? GenPathParams<ApiDefinitions[ApiName]['url']>
-          : ReqDetails[K];
+      ? ApiDefinitions[ApiName]['request']
+      : K extends 'pathParams'
+      ? GenPathParams<ApiDefinitions[ApiName]['url']>
+      : ReqDetails[K];
     }>,
   ) => Promise<ApiDefinitions[ApiName]['response']>;
 };
 
 interface Type<T> {
-  new (...args: unknown[]): T;
+  new(...args: unknown[]): T;
 }
 
-function ExtendType<T, U>(baseClass: { new (...args: unknown[]): T }) {
+function ExtendType<T, U>(baseClass: { new(...args: unknown[]): T }) {
   return baseClass as Type<T & U>;
 }
 
