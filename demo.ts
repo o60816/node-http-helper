@@ -6,12 +6,18 @@ async function demo() {
   try {
     // Example usage of getUserDetails API
     const userId = 1;
-    const userDetails = await httpService.getUserDetails({
+    const user = await httpService.getUser({
       headers: { 'Content-Type': 'application/json' },
       pathParams: { userId: userId.toString() },
-      loggerTag: ['getUserDetails'],
+      loggerTag: ['user'],
     });
-    console.log('User Details:', userDetails);
+    console.log('User1:', user);
+
+    const users = await httpService.getUsers({
+      headers: { 'Content-Type': 'application/json' },
+      loggerTag: ['users'],
+    });
+    console.log('User1:', users);
 
     // Example usage of createUser API
     const newUser = {

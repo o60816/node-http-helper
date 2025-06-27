@@ -36,11 +36,17 @@ class CreateUserResponseDto {
 }
 
 export const API_DEFINITIONS = {
-  getUserDetails: {
+  getUser: {
     method: 'get',
     url: `https://jsonplaceholder.typicode.com/users/{userId}`,
     request: undefined,
     response: new GetUserResponseDto(),
+  },
+  getUsers: {
+    method: 'get',
+    url: `https://jsonplaceholder.typicode.com/users`,
+    request: undefined,
+    response: [new GetUserResponseDto()],
   },
   createUser: {
     method: 'post',

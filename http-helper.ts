@@ -112,16 +112,18 @@ type NonUndefined<T> = Expand<{
   [K in keyof T as T[K] extends undefined ? never : K]: T[K];
 }>;
 
+type TupleToArray<T> = T extends readonly [infer U] ? TupleToArray<U>[] : T;
+
 type Api = {
   [ApiName in ApiNames]: (
     reqDetails: NonUndefined<{
       [K in keyof ReqDetails]: K extends 'payload'
-      ? ApiDefinitions[ApiName]['request']
+      ? TupleToArray<ApiDefinitions[ApiName]['request']>
       : K extends 'pathParams'
       ? GenPathParams<ApiDefinitions[ApiName]['url']>
       : ReqDetails[K];
     }>,
-  ) => Promise<ApiDefinitions[ApiName]['response']>;
+  ) => Promise<TupleToArray<ApiDefinitions[ApiName]['response']>>;
 };
 
 interface Type<T> {
