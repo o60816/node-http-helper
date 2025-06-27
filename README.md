@@ -68,19 +68,26 @@ class CreateUserResponseDto {
 }
 
 export const API_DEFINITIONS = {
-  getUserDetails: {
-    method: 'get' as const,
-    url: `https://jsonplaceholder.typicode.com/users/{userId}` as const,
+  getUser: {
+    method: 'get',
+    url: `https://jsonplaceholder.typicode.com/users/{userId}`,
     request: undefined,
     response: new GetUserResponseDto(),
   },
+  getUsers: {
+    method: 'get',
+    url: `https://jsonplaceholder.typicode.com/users`,
+    request: undefined,
+    response: [new GetUserResponseDto()],
+  },
   createUser: {
-    method: 'post' as const,
-    url: `https://jsonplaceholder.typicode.com/users` as const,
+    method: 'post',
+    url: `https://jsonplaceholder.typicode.com/users`,
     request: new CreateUserReqDto(),
     response: new CreateUserResponseDto(),
   }
-};
+} as const;
+
 ```
 
 ## HttpHelper Class
@@ -98,16 +105,20 @@ async function demo() {
   const httpService = new HttpHelper();
 
   try {
-    // Example usage of getUserDetails API
     const userId = 1;
-    const userDetails = await httpService.getUserDetails({
+    const user = await httpService.getUser({
       headers: { 'Content-Type': 'application/json' },
       pathParams: { userId: userId.toString() },
-      loggerTag: ['getUserDetails'],
+      loggerTag: ['user'],
     });
-    console.log('User Details:', userDetails);
+    console.log('User1:', user);
 
-    // Example usage of createUser API
+    const users = await httpService.getUsers({
+      headers: { 'Content-Type': 'application/json' },
+      loggerTag: ['users'],
+    });
+    console.log('Users:', users);
+
     const newUser = {
       name: 'Jane Doe',
       email: 'jane.doe@example.com',

@@ -4,7 +4,6 @@ async function demo() {
   const httpService = new HttpHelper();
 
   try {
-    // Example usage of getUserDetails API
     const userId = 1;
     const user = await httpService.getUser({
       headers: { 'Content-Type': 'application/json' },
@@ -17,9 +16,8 @@ async function demo() {
       headers: { 'Content-Type': 'application/json' },
       loggerTag: ['users'],
     });
-    console.log('User1:', users);
+    console.log('Users:', users);
 
-    // Example usage of createUser API
     const newUser = {
       name: 'Jane Doe',
       email: 'jane.doe@example.com',
